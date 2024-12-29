@@ -28,7 +28,7 @@ class DashboardBlocView extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const <Widget>[
-                  Icon(Icons.area_chart, size: 48),
+                  Icon(Icons.circle, size: 48),
                   Text('Area of Circle BLoC'),
                 ],
               ),
