@@ -1,4 +1,7 @@
+import 'package:bloc_project/bloc/student_bloc.dart'; // Import your StudentBloc
+import 'package:bloc_project/model/student_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StudentBlocView extends StatelessWidget {
   StudentBlocView({super.key});
@@ -7,48 +10,79 @@ class StudentBlocView extends StatelessWidget {
   final _ageController = TextEditingController();
   final _addressController = TextEditingController();
 
-  final _formKey2 = GlobalKey<FormState>();
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Student Cubit"),
+        title: const Text("Student Bloc"),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(18.0),
-        child: Form(
-          child: Column(
-            children: [
-              TextFormField(
-                controller: _nameController,
-                decoration: InputDecoration(hintText: "Name"),
+        child: BlocConsumer<StudentBloc, StudentState>(
+          listener: (context, state) {
+            // You could show a success message or perform some action when state updates
+          },
+          builder: (context, state) {
+            return Form(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _nameController,
+                    decoration: InputDecoration(hintText: "Name"),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _ageController,
+                    decoration: InputDecoration(hintText: "Age"),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  TextFormField(
+                    controller: _addressController,
+                    decoration: InputDecoration(hintText: "Address"),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      final name = _nameController.text;
+                      final age = int.tryParse(_ageController.text) ?? 0;
+                      final address = _addressController.text;
+
+                      context
+                          .read<StudentBloc>()
+                          .add(AddStudentEvent(name, age, address));
+                    },
+                    child: const Text("Submit"),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  state.lstStudents.isEmpty
+                      ? const Text("No students have been added")
+                      : Expanded(
+                          child: ListView.builder(
+                            itemCount: state.lstStudents.length,
+                            itemBuilder: (context, index) {
+                              final student = state.lstStudents[index];
+                              return ListTile(
+                                title: Text(student.name),
+                                subtitle: Text(
+                                    'Age: ${student.age}, Address: ${student.address}'),
+                              );
+                            },
+                          ),
+                        ),
+                ],
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _ageController,
-                decoration: InputDecoration(hintText: "Age"),
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              TextFormField(
-                controller: _addressController,
-                decoration: InputDecoration(hintText: "Address"),
-              ),
-              const SizedBox(
-                height: 20,
-              ),
-              ElevatedButton(onPressed: () {}, child: const Text("Submit")),
-              const SizedBox(
-                height: 20,
-              ),
-              const Text("No student have been added"),
-            ],
-          ),
+            );
+          },
         ),
       ),
     );

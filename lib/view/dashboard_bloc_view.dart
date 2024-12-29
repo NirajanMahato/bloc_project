@@ -50,7 +50,9 @@ class DashboardBlocView extends StatelessWidget {
           ),
           Card(
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                context.read<DashboardCubit>().openStudentListView(context);
+              },
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: const <Widget>[
