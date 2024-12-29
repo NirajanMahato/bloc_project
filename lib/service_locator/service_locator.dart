@@ -1,3 +1,4 @@
+import 'package:bloc_project/bloc/areaofcircle_bloc.dart';
 import 'package:bloc_project/bloc/simpleinterest_bloc.dart';
 import 'package:bloc_project/cubit/dashboard_cubit.dart';
 import 'package:get_it/get_it.dart';
@@ -11,11 +12,13 @@ Future<void> initDependencies() async {
 
 void _initBloc() {
   serviceLocator.registerLazySingleton(() => SimpleinterestBloc());
+  serviceLocator.registerLazySingleton(() => AreaofcircleBloc());
 }
 
 void _initCubit() {
   serviceLocator.registerLazySingleton<DashboardCubit>(
     () => DashboardCubit(
+      serviceLocator(),
       serviceLocator(),
     ),
   );

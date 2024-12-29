@@ -1,52 +1,59 @@
+import 'package:bloc_project/bloc/areaofcircle_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class AreaCircleBlocView extends StatelessWidget {
-  const AreaCircleBlocView({super.key});
+  AreaCircleBlocView({super.key});
+
+  final _radiusController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Counter Cubit'),
+        title: const Text('Area of Circle BLoC'),
         centerTitle: true,
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-              style: TextStyle(
-                fontSize: 20,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _radiusController,
+                decoration: InputDecoration(
+                  hintText: ("Enter Radius"),
+                ),
+                keyboardType: TextInputType.number,
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Text',
-            ),
-          ],
+              const SizedBox(
+                height: 20,
+              ),
+              BlocBuilder<AreaofcircleBloc, double>(
+                builder: (context, state) {
+                  return Text(
+                    "Area of circle: $state",
+                    style: TextStyle(fontSize: 19, fontWeight: FontWeight.bold),
+                  );
+                },
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        final radius =
+                            double.parse(_radiusController.text) ?? 0;
+                        context
+                            .read<AreaofcircleBloc>()
+                            .add(CalculateAreaEvent(radius));
+                      },
+                      child: Text("Calculate"))),
+            ],
+          ),
         ),
-      ),
-      floatingActionButton: Wrap(
-        direction: Axis.vertical,
-        spacing: 8,
-        children: <Widget>[
-          FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Increment',
-            child: const Icon(Icons.add),
-          ),
-          FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Decrement',
-            child: const Icon(Icons.remove),
-          ),
-          FloatingActionButton(
-            onPressed: () {},
-            tooltip: 'Reset',
-            child: const Icon(Icons.reset_tv),
-          ),
-        ],
       ),
     );
   }
